@@ -1,0 +1,100 @@
+<!-- Citation for edit_gym.j2: -->
+<!-- Date: 3/14/2024 -->
+<!-- Adapted from templates/edit_people.j2 in bsg_people_app from CS340 Flask Starter App -->
+<!-- Source: https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/bsg_people_app/templates/edit_people.j2 -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Cohesion Fitness</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href="/static/main.css">
+</head>
+<body>
+
+    
+    <div class = "pageHeader">
+        <img src= "/static/images/CF_Logo_Blue.jpeg" width="350" height ="300" alt = "Cohesion Fitness Company logo" class="picPosition"/>
+        <h1> Cohesion Fitness Gym Management System </h1>
+    </div>
+
+    <div id="Navigation">
+        <nav>
+            <a href={{url_for('root')}}>Home</a>
+            <a href={{url_for('customers')}}>Customers</a>
+            <a href={{url_for('trainers')}}> Trainers</a>
+            <a href={{url_for('memberships')}}> Memberships</a>
+            <a href={{url_for('classes')}}> Classes</a>
+            <a href={{url_for('gyms')}}> Gyms</a>
+            <a href={{url_for('customerclasses')}} > Customer Classes</a>
+            
+        </nav>
+    </div>
+
+    <!-- The following table (37-60) is populated using code from the starter flask app that is cited at the top -->
+    <table class="mainTable">
+        <caption> Editing Gym: </caption>
+        <!-- data variable returns **example** {gymID: 1, address: 123 Apple Street, phone: 202-333-4444, manager: Bob Smith} -->
+        {% if data %}
+            <thead>
+                <tr>
+                    <!-- the following for loop returns each key in data which will be the column headers -->
+                    {% for key in data[0].keys() %}
+                    <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+
+            <tbody>
+                <!-- the following for loop iterates over each gym in Gyms and returns the value for each key/attribute -->
+                {% for item in data %}
+                <tr>
+                    {% for key in item.keys() %}
+                    <td>{{item[key]}}</td> {% endfor %} 
+                </tr>
+                {% endfor %} 
+                {% endif %} 
+            </tbody>
+    </table>
+
+    <!-- The following code prepopulates the input fields with data that was passed in from that particular row -->
+    <section>
+        <h2> Update Gym </h2>
+        <form id="Update_Gym" action="/edit_gym/{{data[0].gymID}}" method="POST">
+
+            <!-- example data: {gymID: 2, address: "123 Apple Street", phone: "777-888-9999", manager: "Joe Shmoe"} -->
+
+            <!-- this hidden form input stores gymID to be used in app.py "POST" method -->
+            <input type="hidden" value="{{data[0].gymID}}" class="form-control" id="gymID" name="gymID">
+
+            <label for="gymID">Gym ID: </label>
+                <input type="text" value="{{data[0].gymID}}" class="form-control" id="gymID" name="gymID" readonly>
+            <br>
+            
+            <label for="address">Address: </label>
+                <input type="text" value="{{data[0].address}}" class="form-control" id="address" name="address" required>
+            <br>
+
+            <label for="phone">Phone: </label>
+                <input type="text" value="{{data[0].phone}}" class="form-control" id="phone" name="phone" required>
+            <br>
+
+            <label for="manager">Manager: </label>
+                <input type="text" value="{{data[0].manager}}" class="form-control" id="manager" name="manager" required>
+            <br>
+     
+
+            <!-- clicking Update in the UI form will send these form inputs to edit_gym route -->
+            <input type="submit" value="Update" name="Update_Gym" >
+            <a href='/gyms'><input  type="button" value="Cancel"></a>
+
+        </form>
+
+    </section>
+
+
+
+</body>
+</html>

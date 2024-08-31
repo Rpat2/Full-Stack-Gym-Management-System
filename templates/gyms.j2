@@ -1,0 +1,106 @@
+<!-- Citation for gyms.j2: -->
+<!-- Date: 3/1/2024 -->
+<!-- Adapted from templates/people.j2 in bsg_people_app from CS340 Flask Starter App -->
+<!-- Source: https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/bsg_people_app/templates/people.j2 -->
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Cohesion Fitness</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href="/static/main.css">
+</head>
+<body>
+    
+    <div class = "pageHeader">
+        <img src= "/static/images/CF_Logo_Blue.jpeg" width="350" height ="300" alt = "Cohesion Fitness Company logo" class="picPosition"/>
+        <h1> Cohesion Fitness Gym Management System </h1>
+    </div>
+
+    <div id="Navigation">
+        <nav>
+            <a href={{url_for('root')}}>Home</a>
+            <a href={{url_for('customers')}}>Customers</a>
+            <a href={{url_for('trainers')}}> Trainers</a>
+            <a href={{url_for('memberships')}}> Memberships</a>
+            <a href={{url_for('classes')}}> Classes</a>
+            <a href={{url_for('gyms')}}> Gyms</a>
+            <a href={{url_for('customerclasses')}} > Customer Classes</a>
+            
+        </nav>
+    </div>
+
+
+
+    <section>
+        
+        <h2 class = "headerTop">Gyms</h2>
+
+        <table class="mainTable">
+
+            <thead>
+            
+                <td>gymID</td>
+                <td>Address</td>
+                <td>Phone</td>
+                <td>Manager</td>
+                <td>Edit</td>
+            <tbody>
+
+
+            <!-- This goes through the data that was passed in by the app.py and appends each item to a row -->
+            <!-- The buttons link to the edit trainer page route with the gymID passed in -->
+
+            {% for gym in gym_data %}
+            <tr>
+                <td>{{gym['gymID']}}</td>
+                <td>{{gym['address']}}</td>
+                <td>{{gym['phone']}}</td>
+                <td>{{gym['manager']}}</td>
+                <td><button><a href="edit_gym/{{gym.gymID}}" class="btn btn-default">Edit</a></button></td>
+            </tr>
+
+            {% endfor %}
+
+            
+        </table>
+
+    </section>
+
+
+    <section>
+
+            <h2>Add Gym</h2>
+            <form id = "Add_Gym" action="/gyms" method = "POST">
+                
+                
+                <label for = "address">Address</label>
+                <input type="text" class="form-control" id="address" name ="address">
+                
+                <br>
+                    
+                <label for = "phone">Phone</label>
+                <input type="text" class="form-control" id="phone" name ="phone">
+                  
+                <br>
+
+                <label for = "manager">Manager</label>
+                <input type = "text" class="form-control" id="manager" name="manager">    
+              
+                <br>
+                <!-- Create 'Add Gym' button -->
+                <input type="submit" value="Create" name="Add_Gym" >
+
+
+            </form>
+
+    </section>  
+
+
+
+
+</body>
+</html>

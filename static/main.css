@@ -1,0 +1,193 @@
+  
+  /*  ----- Form ----- */
+  form {
+
+    display: column; 
+    flex-direction:column; 
+    border:3px solid maroon;
+    padding-left: 20px;
+    padding-bottom: 10px;
+    padding-top:20px;
+    margin-top: 10px;
+    width: 50%;
+
+    }
+  /* fieldset {}
+  legend {}
+
+  label {}
+
+  button {
+  
+  } */
+
+  input {
+    margin-bottom: 5px;
+    width: 25%;
+    
+  }
+
+  select {
+    margin: 0.5%;
+  }
+    
+  
+  /* textarea {}
+  output {}
+  meter {}
+  progress {} */
+  
+
+  /*  ----- Section ----- */
+
+section{
+  padding: 10px;
+}
+
+
+  /*  ----- Table ----- */
+table {
+   width:60%;
+   border: 3px solid maroon;
+   padding: 5px;
+   font-size: 20px;
+  }
+/* caption {}
+thead {}
+tbody {}
+tfoot {}
+tr {} */
+/* tr:nth-child(even) {} */
+/* th {} */
+td {
+  border: 1px solid black;
+
+}
+/* td:nth-child(1) {}
+colgroup {}
+data {}
+datalist {} */
+
+
+.submit-button {
+  width: 50%;
+}
+
+
+.headerTop {
+  width: auto;
+  text-align: center;
+}
+
+
+h2 {
+  background-color: maroon;
+  padding:1%;
+  color: rgb(245, 235, 235);
+  width:50%;
+}
+
+
+
+.mainTable{
+  margin-left: auto;
+  margin-right:auto;
+}
+
+.pageHeader h1 {
+  text-align: center;
+ 
+
+}
+
+.picPosition {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+   
+}
+
+#onetable{
+  width:70%;
+} 
+
+#memtable {
+  width: 40%;
+  
+}
+
+.address {
+  width: 50%;
+}
+
+#intersectionTable {
+  width: 20%;
+
+  
+}
+
+.formLabel{
+  text-align: left;
+  
+}
+
+:root {
+  
+  --light-purple: #ADA1B9;
+  --navy-blue: #355379;
+  --ocean-blue: #91bff3;
+  --light-blue: #C1F6FC;
+  --tan: #FCE1E1;
+  --tan-transparent: rgba(226, 202, 202, 0.5)
+
+}
+
+
+body {       /* Can alternatively define in html {}. */
+/* background-color: rgb(184, 215, 226); */
+background-color: rgb(206, 232, 241);
+
+/* background-color: var(--tan-transparent); */
+
+
+}
+
+body p{ 
+
+  font-size: 21px;
+}
+
+
+
+
+
+nav {text-align: center;
+     margin: 2%;
+     font-size: 18px;}
+
+
+  nav a {
+    background-color:  var(--light-blue);
+    color: navy;
+    font-weight:bold; 
+    text-decoration: none;
+    
+
+    padding: 10px;
+    margin: 2px;
+    border: 2px solid rgb(0, 0, 99);
+    
+
+  }
+
+  nav a:hover {
+    background-color: maroon;
+    color: white;
+  }
+
+
+
+
+
+  
+

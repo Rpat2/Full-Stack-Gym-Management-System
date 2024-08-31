@@ -1,0 +1,119 @@
+<!-- Citation for customerclasses.j2: -->
+<!-- Date: 3/7/2024 -->
+<!-- Adapted from templates/people.j2 in bsg_people_app from CS340 Flask Starter App -->
+<!-- Source: https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/bsg_people_app/templates/people.j2 -->
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Cohesion Fitness</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href="/static/main.css">
+
+
+
+</head>
+<body>
+    
+    <div class = "pageHeader">
+        <img src= "/static/images/CF_Logo_Blue.jpeg" width="350" height ="300" alt = "Cohesion Fitness Company logo" class="picPosition"/>
+        <h1> Cohesion Fitness Gym Management System </h1>
+    </div>
+
+    <div id="Navigation">
+          <nav>
+            <a href={{url_for('root')}}>Home</a>
+            <a href={{url_for('customers')}}>Customers</a>
+            <a href={{url_for('trainers')}}> Trainers</a>
+            <a href={{url_for('memberships')}}> Memberships</a>
+            <a href={{url_for('classes')}}> Classes</a>
+            <a href={{url_for('gyms')}}> Gyms</a>
+            <a href={{url_for('customerclasses')}} > Customer Classes</a>
+            
+        </nav>
+    </div>
+
+
+
+    <section>
+        <h2 class = "headerTop" >Customer Classes</h2>
+
+        <table id ="onetable" class="mainTable">
+        <thead>
+            <tr>
+                <td>Customer Class ID</td>
+                <td>Customer</td>
+                <td>Class Information</td>
+                <td>Edit</td>
+                <td>Delete</td>
+            </tr>
+        </thead>
+        <tbody>
+
+        <!-- This goes through the data that was passed in by the app.py and appends each item to a row -->
+        <!-- The buttons link to the edit customer classes page route with the customerclassID passed in -->
+
+        {% for item in data %}
+            <tr>
+                <td>{{item['customerclassID']}}</td>
+                <td>{{item['Name']}}</td>
+                <td>{{item['ClassInfo']}}</td>
+                <td><button><a href="edit_cc/{{item.customerclassID}}">Edit</a> </button></td>
+                <td><button onclick = "return confirm('Are you sure you want to delete?')" ><a href="delete_cc/{{item.customerclassID}}">Delete</a> </button></td>
+            </tr>
+        </tbody>
+        {% endfor %}
+
+        </table>
+
+    </section>
+
+
+
+
+    <section>
+
+        <div>
+            <h2>Add Customer Class</h2>
+            <form id="Enroll" action="/customerclasses" method = "POST">
+                
+                <label for = "customerID">Customer: </label>
+                <select id="customerID" name="customerID">
+
+                <!-- first dropdown displays list of concatenated customer names; sends customerID for selected customer to app.py -->
+                {% for customer in customerdata %}
+                    <option value="{{customer['customerID']}}"> {{customer['firstName'] + " " + customer['lastName'] }}</option>
+                {% endfor %}
+
+                </select>
+                <br> 
+
+
+                <label for="classID">Class: </label>
+                <select id="classID" name="classID">
+
+                <!-- 2nd dropdown displays list of class info; sends classID for selected class to app.py -->
+                {% for class in classdata %}
+                    <option value="{{class['classID']}}">{{class['type'] + " - "+ class['level']}} - {{class['classDate']}} at {{class['classTime']}} - Gym {{class['gymID']}}</option>
+                {% endfor %}
+
+                </select>
+
+                <br>
+                <br>
+
+                
+    
+                <input type="submit" value="Enroll" name = "Enroll">
+
+
+            </form>
+        </div>
+
+    </section> 
+
+</body>
+</html>

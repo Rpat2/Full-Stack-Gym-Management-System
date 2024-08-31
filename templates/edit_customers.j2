@@ -1,0 +1,159 @@
+<!-- Citation for edit_customers.j2: -->
+<!-- Date: 3/1/2024 -->
+<!-- Adapted from templates/people.j2 in bsg_people_app from CS340 Flask Starter App -->
+<!-- Source: https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/bsg_people_app/templates/people.j2 -->
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Cohesion Fitness</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href="/static/main.css">
+
+
+</head>
+<body>
+    
+    <div class = "pageHeader">
+        <img src= "/static/images/CF_Logo_Blue.jpeg" width="350" height ="300" alt = "Cohesion Fitness Company logo" class="picPosition"/>
+        <h1> Cohesion Fitness Gym Management System </h1>
+    </div>
+
+    <div id="Navigation">
+        <nav>
+            <a href="/">Home</a>
+            <a href="/customers">Customers</a>
+            <a href="trainers.html"> Trainers</a>
+            <a href="/memberships"> Memberships</a>
+            <a href="classes.html"> Classes</a>
+            <a href="gyms.html"> Gyms </a>
+            <a href="customerclasses.html" > Customer Classes</a>
+
+        </nav>
+    </div>
+
+
+    <section>
+        <h2 class = "headerTop">Customers</h2>
+
+        <table class="mainTable"> 
+            <caption> Editing Customer: </caption>
+
+            {% if customer_data %}
+                <thead>
+    
+                    <td> customerID </td>
+                    <td> First Name </td>
+                    <td> Last Name </td>
+                    <td> email </td>
+                    <td> Phone </td>
+                    <td> Membership Tier </td>
+       
+            <!-- The following table (56-68) is populated using code from the starter flask app that is cited at the top -->
+                <tbody>
+                    <!-- loop through every item in customer_data -->
+                    {% for item in customer_data %}
+                    <tr>
+                        <!-- Loop through every key in the current item dictionary -->
+                        {% for key in item.keys() %}
+                        
+                        <!-- make a new <td> based on the item key value -->
+                        <td>{{item[key]}}</td> {% endfor %} 
+                    </tr> 
+                    {% endfor %} 
+            {% endif %} 
+        </table>
+
+
+    </section>
+
+
+
+    <section>
+
+    
+        <h2> Update Customer</h2>
+        <form id = "editCustomer" action = "/edit_customer/{{customer_data[0].customerID}}" method = "POST">
+
+            <!--This creates a hidden form input to store the passed customerID of the customer we are editing-->
+            <input type = "hidden" value="{{customer_data[0].customerID}}" class="form-control" id = "customerID"  name = "customerID" required>
+
+            <!-- The values are all preset to what they were in the table -->
+            <label for = "firstName"> First Name</label>
+            <input 
+                id = "firstName" 
+                type = "text" 
+                value = "{{customer_data[0]['firstName']}}"
+                name ="firstName">
+            <br>
+
+            
+            <label for = "lastName"> Last Name</label>
+            <input 
+                id = "lastName" 
+                type = "text" 
+                value = "{{customer_data[0]['lastName']}}"
+                name ="lastName">
+            <br>
+
+
+            <label for = "email"> E-mail</label>
+            <input 
+                id = "email"
+                type = "text"
+                value = "{{customer_data[0]['email']}}"
+                name ="email">
+            <br>
+
+
+            <label for = "phone"> Phone Number</label>
+            <input 
+                id = "phone"
+                type = "text"
+                value = "{{customer_data[0]['phone']}}"
+                name ="phone">
+            <br>
+
+            <!-- Loop through datasets that were recieved from the app.py and populate the options-->
+            <label for = "membership"> Membership</label>
+            <select class="form-control" id="tier" name="tier">
+                
+                <option value = "NULL"> {{None}}</option>
+                {% for item in memberships %}
+                    {% if item['tier'] == customer_data[0]['tier'] %}
+                        <option value = "{{ item['memID'] }}" selected> {{ item['tier'] }}</option>
+                    {% else %}
+                        <option value = "{{ item['memID'] }}"> {{ item['tier'] }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+
+
+            <br>
+            <br>
+
+            <input type="submit" value="Update Customer" name = "Update Customer">
+            <a href='/customers'><input type="button" value="Cancel"></a>
+
+        </form>
+    </div>
+
+    <br>
+    <br>
+
+
+
+
+
+
+
+
+
+    </section>
+
+
+</body>
+</html>

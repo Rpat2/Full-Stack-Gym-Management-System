@@ -1,0 +1,130 @@
+<!-- Citation for memberships.j2: -->
+<!-- Date: 3/1/2024 -->
+<!-- Adapted from templates/people.j2 in bsg_people_app from CS340 Flask Starter App -->
+<!-- Source: https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/bsg_people_app/templates/people.j2 -->
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Cohesion Fitness</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href="/static/main.css">
+
+
+
+</head>
+<body>
+    
+    <div class = "pageHeader">
+        <img src= "/static/images/CF_Logo_Blue.jpeg" width="350" height ="300" alt = "Cohesion Fitness Company logo" class="picPosition"/>
+        <h1> Cohesion Fitness Gym Management System </h1>
+    </div>
+
+    <div id="Navigation">
+        <nav>
+            <a href="/">Home</a>
+            <a href="/customers">Customers</a>
+            <a href="/trainers"> Trainers</a>
+            <a href="/memberships"> Memberships</a>
+            <a href="/classes"> Classes</a>
+            <a href="/gyms"> Gyms </a>
+            <a href="/customerclasses" > Customer Classes</a>
+
+        </nav>
+    </div>
+
+
+
+    <section>
+        <h2 class = "headerTop">Memberships</h2>
+
+        <table id = "memtable" class="mainTable">
+            <tr>
+                <td>memID</td>
+                <td>Membership Tier</td>
+                <td>Length (Months) </td>
+                <td>Cost (Dollars)</td>
+                <td>Edit</td>
+                <td>Delete</td>    
+            </tr>
+
+            <!-- This goes through the data that was passed in by the app.py and appends each item to a row -->
+            <!-- The buttons link to the edit membership page route with the membershipID passed in -->
+
+
+            {% for membership in memberships %}
+            <tr>
+                <td>{{ membership.memID}}</td>
+                <td>{{ membership.tier}}</td>
+                <td>{{ membership.length}}</td>
+                <td>{{ membership.cost}}</td>
+                <td><button><a href="edit_membership/{{membership.memID}}" class="btn btn-default">Edit</a></button></td>
+				<td><button onclick = "return confirm('Are you sure you want to delete?')"><a href="delete_membership/{{membership.memID}}" class="btn btn-default">Delete</a></button></td>
+            </tr>
+            {% endfor %}
+
+
+
+
+        </table>
+
+    </section>
+
+
+
+    <section>
+        <h2> Add Membership Tier</h2>
+        <form action="/memberships" method="POST">
+            
+
+            <label for = "memTier"> Tier Name</label>
+            <input 
+                id = "memTier" 
+                type = "text" 
+                name ="memTier">
+            <br>
+                
+            <label for = "length"> Length(Months)</label>
+            <input 
+                id = "length" 
+                type = "number" 
+                name ="length">
+            <br>
+
+            <label for = "cost"> Cost(Dollars)</label>
+            <input 
+                id = "cost" 
+                type = "number" 
+                name ="cost">
+            <br>
+            <br>
+
+            <input type="submit" value="Create" name="Add Memberships">
+
+        </form>
+    </div>
+
+
+    </section>
+     
+
+    
+    
+        
+    
+
+
+
+
+</body>
+</html>
+
+
+
+
+
+

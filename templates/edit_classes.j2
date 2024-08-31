@@ -1,0 +1,216 @@
+<!-- Citation for edit_classes.j2: -->
+<!-- Date: 3/1/2024 -->
+<!-- Adapted from templates/people.j2 in bsg_people_app from CS340 Flask Starter App -->
+<!-- Source: https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/bsg_people_app/templates/people.j2 -->
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Cohesion Fitness</title>
+
+
+<!-- Additional Citation -->
+<!-- Date:3/1/2024   -->
+<!-- Adapted from  https://releases.jquery.com/ -->
+<!-- The script tag below (on line 21) that links to the jquery CDN was copy and pasted and obtained from jquery.com -->
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    
+    
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href="/static/main.css">
+</head>
+<body>
+    
+
+    <div class = "pageHeader">
+        <img src= "/static/images/CF_Logo_Blue.jpeg" width="350" height ="300" alt = "Cohesion Fitness Company logo" class="picPosition"/>
+        <h1> Cohesion Fitness Gym Management System </h1>
+    </div>
+
+
+
+    <div id="Navigation">
+        <nav>
+            <a href="/">Home</a>
+            <a href="/customers">Customers</a>
+            <a href="/trainers"> Trainers</a>
+            <a href="/memberships"> Memberships</a>
+            <a href="/classes"> Classes</a>
+            <a href="/gyms"> Gyms</a>
+            <a href="/customerclasses" > Customer Classes</a>
+            
+        </nav>
+    </div>
+
+
+    <section>
+        <h2 class = "headerTop">Classes</h2>
+
+        <table class="mainTable"> 
+            <caption> Editing Class: </caption>
+            
+            {% if class_data %}
+                <thead>
+    
+                    <td>classID</td>
+                    <td>Type</td>
+                    <td>Date</td>
+                    <td>Time</td>
+                    <td>Cost</td>
+                    <td>Level</td>
+                    <td>Trainer Name</td>
+                    <td>Gym ID</td>
+                    
+       
+                <!-- The following table (72-84) is populated using code from the starter flask app that is cited at the top -->
+                <tbody>
+                     <!-- loop through every item in customer_data -->
+                    {% for item in class_data %}
+                    <tr>
+                        <!-- Loop through every key in the current item dictionary -->
+                        {% for key in item.keys() %}
+                        
+                        <!-- make a new <td> based on the item key value -->
+                        <td>{{item[key]}}</td> {% endfor %} 
+                    </tr> 
+                    {% endfor %} 
+            {% endif %} 
+        </table>
+
+
+    </section>
+
+
+
+
+
+
+    <section>
+
+        <div>
+            <h2>Update Class</h2>
+            <form method = "POST" action = "/edit_classes/{{class_data[0].classID}}">
+                
+                <!--This creates a hidden form input to store the passed classID of the class we are editing-->
+                <input type = "hidden" value="{{class_data[0].classID}}" class="form-control" id = "classID"  name = "classID" required>
+
+                
+                <label for = "classType"> Type</label>
+
+                <!-- This goes through each item in the specialists data set and finds the one that matches the user selection
+                The rest of the options are added afterwards -->
+                <!-- <select id = "classType" name = "classType" > 
+                    <option > Select a class type</option>
+                {% for item in specialists %}
+                    {% if item['specialistType'] == class_data[0]['type'] %}
+                        <option value = "{{ item['specialistType']}}" selected> {{ item['specialistType']}} </option>
+                    {% else %}
+                        <option value = "{{ item['specialistType']}}" > {{ item['specialistType']}} </option>
+                    {% endif %}
+                {% endfor %}
+                
+                </select>
+                <br> -->
+
+                <select id = "classType" name = "classType" >
+                    <option value = "{{ class_data[0]['type']}}" readonly >{{ class_data[0]['type']}}</option>
+                </select>
+                <br>
+
+
+
+                <label for = "classDate"> Date</label>
+                <input 
+                    id = "classDate" 
+                    type = "date" 
+                    name ="classDate"
+                    value = "{{class_data[0]['classDate']}}">
+                <br>
+
+
+                <label for = "classTime"> Time</label>
+                <input 
+                    id = "classTime"
+                    type = "time"
+                    name ="classTime"
+                    value = "{{class_data[0]['classTime']}}" required>
+                <br>
+
+
+                <label for = "cost"> Cost</label>
+                <input 
+                    id = "cost"
+                    type = "number"
+                    name ="cost"
+                    value = "{{class_data[0]['cost']}}">
+                <br>
+
+                
+                
+                <!-- This block of code goes through each level and finds the matching level of the user selected class
+                The rest of the options are added afterwards -->
+                <label for = "level"> Level</label>
+                <select id="level" name="level">
+                {% for level in levels %}
+                    {% if class_data[0]['level'] == level %}
+                        <option value = "{{level}}" selected> {{level}} </option>
+                    {% else %}
+                        <option value = "{{level}}">{{level}} </option>
+                    {% endif %}
+                {% endfor %}
+                </select>
+                <br>
+
+
+                <!-- This block of code goes through each trainerID and finds the matching trainer of the user selected class
+                The rest of the trainers are added afterwards -->
+                <label for = "trainerID" id="trainer_show"> Trainer</label>
+                <select id =trainerID name="trainerID">
+
+                    {% for trainer in other_trainers %}
+                        {% if trainer['trainerName'] == class_data[0]['trainerName'] %}
+                            <option value = "{{trainer['trainerID']}}" selected> {{trainer['trainerName']}} </option>
+                        {% else %}
+                            <option value = "{{trainer['trainerID']}}"> {{trainer['trainerName']}} </option>
+                        {% endif %}
+                    {% endfor %}
+
+
+                </select>
+                <br>
+
+
+                <!-- This block of code goes through each gymID and finds the matching gym of the user selected class
+                The rest of the gyms are added afterwards -->
+                <label for = "gymID"> Gym</label>
+                <select id="gym" name="gymID">
+                    {% for gym in gym_data %}
+                        {% if gym['gymID'] == class_data[0]['gymID'] %}
+                            <option value = "{{gym['gymID']}}" selected> {{gym['Info']}}</option>
+                        {% else %}
+                            <option value = "{{gym['gymID']}}"> {{gym['Info']}}</option>
+                        {% endif %}
+                    {% endfor %}
+                    
+                </select>
+
+                <br>
+                <br>
+            
+                <input type="submit" value="Update" name = "Update Class">
+                <a href='/classes'><input type="button" value="Cancel"></a>
+
+
+            </form>
+        </div>
+
+    </section> 
+
+
+</body>
+</html>

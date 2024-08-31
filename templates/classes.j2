@@ -1,0 +1,256 @@
+<!-- Citation for classes.j2: -->
+<!-- Date: 3/1/2024 -->
+<!-- Adapted from templates/people.j2 in bsg_people_app from CS340 Flask Starter App -->
+<!-- Source: https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/bsg_people_app/templates/people.j2 -->
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Cohesion Fitness</title>
+
+
+<!-- Additional Citation -->
+<!-- Date:3/1/2024   -->
+<!-- Adapted from  https://releases.jquery.com/ -->
+<!-- The script tag below (on line 20) that links to the jquery CDN was copy and pasted and obtained from jquery.com -->
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    
+
+<!-- Additional Citation -->
+<!-- Date:3/1/2024   -->
+<!-- Adapted from https://www.youtube.com/watch?v=5nL7X1UMWsc&t=253s by LearnCode.academy -->
+<!-- The following script follows similar structure to the code in the youtube video. I wrote the code myself but learned how jquery works from the video-->
+
+    <script>
+        $(document).ready(function(){
+
+            //first we hide the other forms. The user has to pick a gymID first.
+            $('#level_show').hide();
+            $('#level').hide();
+            $('#trainer_show').hide();
+            $('#trainerID').hide();
+
+            //Once gym ID is clicked then you can show the level form.
+            $('#gymID').change(function() {
+                $('#level_show').show();
+                $('#level').show();
+            });
+
+        //Once level is clicked then it shows the trainer form.
+            $('#level').change(function() {
+                $('#trainer_show').show();
+                $('#trainerID').show();
+
+                //These are variables that store the user inputs
+                var gymID = $('#gymID').val();
+                var classType = $('#classType').val()
+                var level = $('#level').val();
+
+                
+                //app.route will filter out the trainers that match the criteria, store them in a data set in the form of JSON, and send it back here.
+                $.ajax({
+                    url: '/trainer_filter',
+                    method:'POST', 
+                    dataType:"json",
+                    data: {gymID: gymID, level:level, classType:classType},
+
+                    //This takes the data that was recieved from app.route and uses it to make the drop down menu
+                    //It first checks if the data is length 0 this means no trainers were found that match the user selections
+                    //If the length is greater than 0 then it will iterate through each index and item in the data and append it to the trainerID selection. 
+                    success: function(data) {
+                        
+                        //store the form for the trainer drop down menu into a variable. This varible will be used to append the options to.
+                        var trainerDrop = $('#trainerID');
+
+                        if (data.length ==0 ) {
+                            trainerDrop.append('<option value =""> No trainers found that match criteria. Press clear form and try again</option>')
+                        
+                        } else {
+                            //Go trhough each index and item in the data and create options for each of them. 
+                            $.each(data, function(i, item) {
+                                trainerDrop.append('<option value="' + item['trainerID'] + '">' + item['trainerName'] + '</option>');
+                            });
+                    }
+                    },
+                
+                });
+            });
+            
+            //This reloads the page once the button for resetform is clicked(#resetform is the id)
+            // $('#resetform').click(function() {
+            //     location.reload();
+            //         });
+            
+
+        });
+
+
+    </script>
+
+
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href="/static/main.css">
+
+
+</head>
+<body>
+    
+    <div class = "pageHeader">
+        <img src= "/static/images/CF_Logo_Blue.jpeg" width="350" height ="300" alt = "Cohesion Fitness Company logo" class="picPosition"/>
+        <h1> Cohesion Fitness Gym Management System </h1>
+    </div>
+
+    <div id="Navigation">
+        <nav>
+            <a href="/">Home</a>
+            <a href="/customers">Customers</a>
+            <a href="/trainers"> Trainers</a>
+            <a href="/memberships"> Memberships</a>
+            <a href="/classes"> Classes</a>
+            <a href="/gyms"> Gyms</a>
+            <a href="/customerclasses" > Customer Classes</a>
+            
+        </nav>
+    </div>
+
+
+
+    <section>
+        <h2 class = "headerTop">Classes</h2>
+
+        <table id = "onetable" class="mainTable">
+            <tr>
+                <td>classID</td>
+                <td>Type</td>
+                <td>Date</td>
+                <td>Time</td>
+                <td>Cost</td>
+                <td>Level</td>
+                <td>Trainer Name</td>
+                <td>Gym ID</td>
+                <td>Edit</td>
+                <td>Delete</td>
+                
+                
+            </tr>
+
+            <!-- This goes through the data that was passed in by the app.py and appends each item to a row -->
+            <!-- The buttons link to the edit classes page route with the customerID passed in -->
+
+            {% for class in classes %}
+            <tr>
+                <td>{{class.classID}}</td>
+                <td>{{class.type}}</td>
+                <td>{{class.classDate}}</td>
+                <td>{{class.classTime}}</td>
+                <td>{{class.cost}}</td>
+                <td>{{class.level}}</td>
+                <td>{{class.trainerName}}</td>
+                <td>{{class.gymID}}</td>
+                <td><button><a href="edit_classes/{{class.classID}}">Edit</a></button></td>
+                <td><button onclick = "return confirm('Are you sure you want to delete?')" ><a href="delete_class/{{class.classID}}">Delete</a></button></td>
+            </tr>
+            {% endfor %}
+
+            
+
+        </table>
+
+    </section>
+
+
+
+    <section>
+
+        <div>
+            <h2>Add Class</h2>
+            <form method = "POST" id = "form1">
+                
+                
+                <label for = "classType"> Type</label>
+
+                <!-- This block of code iterates through each item in the dataset specialists and adds it as an option -->
+                <select id = "classType" name = "classType"> 
+                    <option> Select a class type</option>
+                {% for item in specialists %}
+                    <option value = "{{ item['specialistType']}}"> {{ item['specialistType']}} </option>
+                {% endfor %}
+                
+                </select>
+                <br>
+
+                <label for = "classDate"> Date</label>
+                <input 
+                    id = "classDate" 
+                    type = "date" 
+                    name ="classDate"
+                    required>
+                <br>
+
+
+                <label for = "classTime"> Time</label>
+                <input 
+                    id = "classTime"
+                    type = "time"
+                    name ="classTime"
+                    required>
+                <br>
+
+
+                <label for = "cost"> Cost</label>
+                <input 
+                    id = "cost"
+                    type = "number"
+                    name ="cost"
+                    required>
+                <br>
+
+
+                <!-- This block of code goes through each gym in the gyms dataset that was passed in via app.py. It then adds each gym information as an option -->
+                <label for = "gymID"> Gym ID</label>
+                <select id="gymID" name="gymID" required>
+                    <option> Select a Gym</option>
+                   {% for gym in gyms %}
+                    <option value = "{{gym['gymID']}}"> {{gym['Info']}}</option>
+                    {% endfor %}
+                </select>
+                <br>
+
+
+
+                <label for = "level" id="level_show"> Level</label>
+                <select id="level" name="level" required>
+                    <option value = "">Select a Level</option>
+                    <option value="Beginner">Beginner</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Advanced">Advanced</option>
+                </select>
+
+                <br>
+                
+
+                <label for = "trainerID" id="trainer_show"> Trainer</label>
+                <select id =trainerID name="trainerID">
+                   <option> Select a Trainer</option>
+                </select>
+                <br>
+                <br>
+                
+      
+                <input type="submit" value="Create" name = "Add Class">
+                <input type="button" value ="Clear Form" id= "resetform">
+
+            </form>
+            
+        </div>
+
+    </section>  
+
+
+
+</body>
+</html>

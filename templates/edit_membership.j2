@@ -1,0 +1,108 @@
+<!-- Citation for edit_memberships.j2: -->
+<!-- Date: 3/1/2024 -->
+<!-- Adapted from templates/people.j2 in bsg_people_app from CS340 Flask Starter App -->
+<!-- Source: https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/bsg_people_app/templates/people.j2 -->
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Cohesion Fitness</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href="/static/main.css">
+</head>
+<body>
+    
+    
+    <div class = "pageHeader">
+        <img src= "/static/images/CF_Logo_Blue.jpeg" width="350" height ="300" alt = "Cohesion Fitness Company logo" class="picPosition"/>
+        <h1> Cohesion Fitness Gym Management System </h1>
+    </div>
+
+    <div id="Navigation">
+        <nav>
+            <a href="/">Home</a>
+            <a href="/customers">Customers</a>
+            <a href="/trainers"> Trainers</a>
+            <a href="/memberships"> Memberships</a>
+            <a href="/classes"> Classes</a>
+            <a href="/gyms"> Gyms </a>
+            <a href="/customerclasses" > Customer Classes</a>
+
+        </nav>
+    </div>
+
+    
+    <table id = "memtable" class="mainTable"> 
+        <caption> Editing Membership: </caption>
+        
+        {% if data %}
+            <thead>
+
+                <td> memID </td>
+                <td> Membership Tier </td>
+                <td> Length (Months) </td>
+                <td> Cost (Dollars) </td>
+   
+        <!-- The following table (51-63) is populated using code from the starter flask app that is cited at the top -->
+            <tbody>
+                <!-- loop through every item in customer_data -->
+                {% for item in data %}
+                <tr>
+                    <!-- Loop through every key in the current item dictionary -->
+                    {% for key in item.keys() %}
+                    
+                    <!-- make a new <td> based on the item key value -->
+                    <td>{{item[key]}}</td> {% endfor %} 
+                </tr> 
+                {% endfor %} 
+        {% endif %} 
+    </table>
+
+
+    
+    <section>
+        <h2> Update Membership Tier</h2>
+        <form id="editMembership" action="/edit_membership/{{data[0].memID}}" method="POST">
+            
+            
+                <!-- Create hidden form input to store the passed 'memID' of the membership we are editing -->
+                <input type="hidden" value="{{data[0].memID}}" class="form-control" id="memID" name="memID" required>
+
+
+                <label for = "tier"> Membership Tier Name</label>
+                <input 
+                    id = "tier" 
+                    type = "text" 
+                    name ="tier"
+                    value = "{{data[0]['tier']}}">
+                <br>
+        
+               
+        
+                <!--data[0]['length'] gets the value associated with the key "length" in the dicitonary called data 
+                data is one dictionary inside of the tuple. So data[0] gets the first element which is a whole dictionary.
+                the ['length'] gets the value associated with the key "length" -->
+                <label for="length">Membership Length:</label>
+                <input type="number" value="{{ data[0]['length'] }}" class="form-control" id="length" name="length" required>
+        
+                <br>
+
+                <label for="cost">Membership Cost:</label>
+                <input type="number" value="{{ data[0]['cost'] }}" class="form-control" id="cost" name="cost" required>
+
+
+                <br>
+            <input type="submit" value="Update Membership" name="Update Membership" style="margin:.5rem;">
+            <a href='/memberships'><input type="button" value="Cancel"></a>
+        </form>
+
+    </section>
+            
+
+
+</body>
+</html>
+
